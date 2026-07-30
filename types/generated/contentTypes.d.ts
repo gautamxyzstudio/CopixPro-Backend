@@ -504,6 +504,57 @@ export interface ApiMachineIdMachineId extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'orders';
+  info: {
+    displayName: 'Order';
+    pluralName: 'orders';
+    singularName: 'order';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    amount: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'USD'>;
+    customerEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    customerName: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
+      Schema.Attribute.Private;
+    orderNumber: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    paidAt: Schema.Attribute.DateTime;
+    payment_log: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::payment-log.payment-log'
+    >;
+    paymentMethod: Schema.Attribute.Enumeration<['WISE', 'STRIPE', 'PAYPAL']> &
+      Schema.Attribute.DefaultTo<'WISE'>;
+    paymentReference: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    paymentStatus: Schema.Attribute.Enumeration<
+      ['pending', 'processing', 'paid', 'failed', 'cancelled', 'expired']
+    > &
+      Schema.Attribute.DefaultTo<'pending'>;
+    publishedAt: Schema.Attribute.DateTime;
+    software: Schema.Attribute.Relation<'manyToOne', 'api::software.software'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    wiseTransactionId: Schema.Attribute.String;
+  };
+}
+
 export interface ApiPaymentLogPaymentLog extends Struct.CollectionTypeSchema {
   collectionName: 'payment_logs';
   info: {
@@ -527,8 +578,9 @@ export interface ApiPaymentLogPaymentLog extends Struct.CollectionTypeSchema {
       'api::payment-log.payment-log'
     > &
       Schema.Attribute.Private;
+    order: Schema.Attribute.Relation<'oneToOne', 'api::order.order'>;
     paidAt: Schema.Attribute.DateTime;
-    payment_status: Schema.Attribute.Enumeration<['paid']>;
+    payment_status: Schema.Attribute.Enumeration<['paid', 'pending', 'failed']>;
     publishedAt: Schema.Attribute.DateTime;
     response: Schema.Attribute.JSON;
     software: Schema.Attribute.Relation<'manyToOne', 'api::software.software'>;
@@ -566,6 +618,7 @@ export interface ApiSoftwareSoftware extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
+    orders: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
     payment_logs: Schema.Attribute.Relation<
       'oneToMany',
       'api::payment-log.payment-log'
@@ -1060,6 +1113,7 @@ export interface PluginUsersPermissionsUser
       'oneToMany',
       'api::machine-id.machine-id'
     >;
+    orders: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -1102,6 +1156,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::contact-form.contact-form': ApiContactFormContactForm;
       'api::machine-id.machine-id': ApiMachineIdMachineId;
+      'api::order.order': ApiOrderOrder;
       'api::payment-log.payment-log': ApiPaymentLogPaymentLog;
       'api::software.software': ApiSoftwareSoftware;
       'plugin::content-releases.release': PluginContentReleasesRelease;

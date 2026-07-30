@@ -1,0 +1,86 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "orderNumber": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "customerName": {
+      "type": "string",
+      "required": true
+    },
+    "customerEmail": {
+      "type": "email",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "paymentMethod": {
+      "type": "enumeration",
+      "default": "WISE",
+      "enum": [
+        "WISE",
+        "STRIPE",
+        "PAYPAL"
+      ]
+    },
+    "paymentReference": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "default": "pending",
+      "enum": [
+        "pending",
+        "processing",
+        "paid",
+        "failed",
+        "cancelled",
+        "expired"
+      ]
+    },
+    "wiseTransactionId": {
+      "type": "string"
+    },
+    "paidAt": {
+      "type": "datetime"
+    },
+    "payment_log": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::payment-log.payment-log",
+      "inversedBy": "order"
+    },
+    "software": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::software.software",
+      "inversedBy": "orders"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "orders"
+    }
+  }
+}

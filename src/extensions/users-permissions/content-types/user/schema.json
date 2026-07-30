@@ -90,7 +90,13 @@
     },
     "isActive": {
       "type": "boolean",
-      "default":false
+      "default": false
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

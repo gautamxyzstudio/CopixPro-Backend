@@ -23,7 +23,9 @@
     "payment_status": {
       "type": "enumeration",
       "enum": [
-        "paid"
+        "paid",
+        "pending",
+        "failed"
       ]
     },
     "response": {
@@ -49,6 +51,12 @@
       "relation": "manyToOne",
       "target": "api::software.software",
       "inversedBy": "payment_logs"
+    },
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order",
+      "mappedBy": "payment_log"
     }
   }
 }
