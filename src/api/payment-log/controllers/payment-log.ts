@@ -209,24 +209,31 @@ export default factories.createCoreController('api::payment-log.payment-log', ({
   },
 
   async wiseWebhook(ctx) {
-
-    const body = ctx.request.body;
+    const body = ctx.request.body || {};
+    const transferId =
+      body.transferId ||
+      body.wiseTransferId ||
+      body.transactionId ||
+      body.data?.resource?.id ||
+      body.resource?.id;
 
     const result = await wiseService.verifyWiseTransaction({
-      wiseTransferId: body.transferId,
+      wiseTransferId: transferId ? String(transferId) : undefined,
     });
 
     if (!result.matched) {
-      return ctx.send({
-        success: false,
-        message: result.reason || "No matching transaction found on Wise",
-      }, 400);
+      return ctx.send(
+        {
+          success: false,
+          message: result.reason || "No matching transaction found on Wise",
+        },
+        400,
+      );
     }
 
     return {
       success: true,
-      response: result
-    }
-
+      response: result,
+    };
   }
 }));
