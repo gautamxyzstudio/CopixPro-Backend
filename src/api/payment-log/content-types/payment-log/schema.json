@@ -12,7 +12,9 @@
   "pluginOptions": {},
   "attributes": {
     "transactionId": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "currency": {
       "type": "string"

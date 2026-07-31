@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-07-31T06:37:24.237Z"
+    "x-generation-date": "2026-07-31T10:49:38.992Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -1149,6 +1149,77 @@
             }
           }
         }
+      }
+    },
+    "/orders/me": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Order"
+        ],
+        "parameters": [],
+        "operationId": "get/orders/me"
       }
     },
     "/orders/status/{orderNumber}": {
@@ -8362,6 +8433,9 @@
         ],
         "properties": {
           "data": {
+            "required": [
+              "transactionId"
+            ],
             "type": "object",
             "properties": {
               "transactionId": {
@@ -8484,6 +8558,9 @@
       },
       "PaymentLog": {
         "type": "object",
+        "required": [
+          "transactionId"
+        ],
         "properties": {
           "id": {
             "oneOf": [

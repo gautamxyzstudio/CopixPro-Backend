@@ -35,7 +35,11 @@
     "paymentMethod": {
       "type": "enumeration",
       "default": "WISE",
-      "enum": ["WISE", "STRIPE", "PAYPAL"]
+      "enum": [
+        "WISE",
+        "STRIPE",
+        "PAYPAL"
+      ]
     },
     "paymentReference": {
       "type": "string",

@@ -584,7 +584,9 @@ export interface ApiPaymentLogPaymentLog extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     response: Schema.Attribute.JSON;
     software: Schema.Attribute.Relation<'manyToOne', 'api::software.software'>;
-    transactionId: Schema.Attribute.String;
+    transactionId: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

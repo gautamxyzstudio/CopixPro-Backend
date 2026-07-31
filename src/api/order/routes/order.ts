@@ -7,7 +7,16 @@ export default {
       path: "/orders/create",
       handler: "order.create",
       config: {
-        auth: false
+        auth: {}
+      }
+    },
+
+    {
+      method: "GET",
+      path: "/orders/me",
+      handler: "order.getMyOrders",
+      config: {
+        auth: {}
       }
     },
 
@@ -16,7 +25,7 @@ export default {
       path: "/orders/status/:orderNumber",
       handler: "order.paymentStatus",
       config: {
-        auth: false
+        auth: {}
       }
     }
 
