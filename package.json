@@ -18,7 +18,7 @@
     "@strapi/plugin-cloud": "5.47.1",
     "@strapi/plugin-documentation": "^5.47.1",
     "@strapi/plugin-users-permissions": "5.47.1",
-    "@strapi/strapi": "5.47.1",
+    "@strapi/strapi": "^5.51.1",
     "axios": "^1.19.0",
     "better-sqlite3": "12.8.0",
     "pg": "^8.21.0",
@@ -46,12 +46,12 @@
     "installId": "393416715e814fb7362788b8f83ba0e0d5a12e93ee11b526b1199a7a50b9d371"
   },
   "allowScripts": {
-    "@swc/core@1.15.40": true,
     "better-sqlite3@12.8.0": true,
     "core-js-pure@3.49.0": true,
-    "esbuild@0.27.7": true,
     "esbuild@0.21.5": true,
     "fsevents@2.3.3": true,
-    "sharp@0.33.5": true
+    "@swc/core@1.15.47": true,
+    "esbuild@0.28.1": true,
+    "sharp@0.34.5": true
   }
 }
