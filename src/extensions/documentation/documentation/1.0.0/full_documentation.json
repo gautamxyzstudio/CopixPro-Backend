@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-08-04T11:18:36.650Z"
+    "x-generation-date": "2026-08-04T13:09:59.002Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -1302,6 +1302,87 @@
           }
         ],
         "operationId": "get/orders/status/{orderNumber}"
+      }
+    },
+    "/orders/process-download-emails": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Order"
+        ],
+        "parameters": [],
+        "operationId": "post/orders/process-download-emails",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/payment-logs": {
@@ -5931,6 +6012,13 @@
                                 "type": "string",
                                 "format": "date-time"
                               },
+                              "downloadEmailSent": {
+                                "type": "boolean"
+                              },
+                              "downloadEmailSentAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
                               "payment_log": {
                                 "type": "object",
                                 "properties": {
@@ -6594,6 +6682,13 @@
                 "type": "string",
                 "format": "date-time"
               },
+              "downloadEmailSent": {
+                "type": "boolean"
+              },
+              "downloadEmailSentAt": {
+                "type": "string",
+                "format": "date-time"
+              },
               "payment_log": {
                 "oneOf": [
                   {
@@ -6714,6 +6809,13 @@
             "type": "string"
           },
           "paidAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "downloadEmailSent": {
+            "type": "boolean"
+          },
+          "downloadEmailSentAt": {
             "type": "string",
             "format": "date-time"
           },
@@ -7889,6 +7991,13 @@
                           "type": "string"
                         },
                         "paidAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "downloadEmailSent": {
+                          "type": "boolean"
+                        },
+                        "downloadEmailSentAt": {
                           "type": "string",
                           "format": "date-time"
                         },
@@ -9725,6 +9834,13 @@
                                 "type": "string"
                               },
                               "paidAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "downloadEmailSent": {
+                                "type": "boolean"
+                              },
+                              "downloadEmailSentAt": {
                                 "type": "string",
                                 "format": "date-time"
                               },
@@ -11664,6 +11780,13 @@
                             "type": "string"
                           },
                           "paidAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "downloadEmailSent": {
+                            "type": "boolean"
+                          },
+                          "downloadEmailSentAt": {
                             "type": "string",
                             "format": "date-time"
                           },

@@ -527,6 +527,9 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     currency: Schema.Attribute.String & Schema.Attribute.DefaultTo<'USD'>;
     customerEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     customerName: Schema.Attribute.String & Schema.Attribute.Required;
+    downloadEmailSent: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    downloadEmailSentAt: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
       Schema.Attribute.Private;

@@ -64,6 +64,13 @@
     "paidAt": {
       "type": "datetime"
     },
+    "downloadEmailSent": {
+      "type": "boolean",
+      "default": false
+    },
+    "downloadEmailSentAt": {
+      "type": "datetime"
+    },
     "payment_log": {
       "type": "relation",
       "relation": "oneToOne",

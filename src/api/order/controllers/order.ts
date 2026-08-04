@@ -215,6 +215,25 @@ export default factories.createCoreController(
         order,
       });
     },
+
+    async processSoftwareDownloadEmails(ctx) {
+      try {
+        const softwareEmailService = (await import("../../../services/softwareEmailService")).default;
+        const result = await softwareEmailService.processPendingSoftwareDownloadEmails(strapi);
+        return ctx.send({
+          success: true,
+          message: "Software download emails processed successfully",
+          result,
+        });
+      } catch (error: any) {
+        strapi.log.error("Process Software Download Emails Error:", error);
+        return ctx.internalServerError({
+          success: false,
+          message: "Failed to process software download emails",
+          error: error.message || error,
+        });
+      }
+    },
   }),
 );
 

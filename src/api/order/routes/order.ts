@@ -27,6 +27,15 @@ export default {
       config: {
         auth: {}
       }
+    },
+
+    {
+      method: "POST",
+      path: "/orders/process-download-emails",
+      handler: "order.processSoftwareDownloadEmails",
+      config: {
+        auth: {}
+      }
     }
 
   ]
