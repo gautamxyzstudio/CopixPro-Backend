@@ -496,6 +496,7 @@ export interface ApiMachineIdMachineId extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     machineId: Schema.Attribute.String;
+    previous_machine_id: Schema.Attribute.JSON;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -504,6 +505,7 @@ export interface ApiMachineIdMachineId extends Struct.CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+    wiseTransactionId: Schema.Attribute.String;
   };
 }
 

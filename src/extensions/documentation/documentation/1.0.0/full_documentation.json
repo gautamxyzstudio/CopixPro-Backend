@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-07-31T12:02:53.708Z"
+    "x-generation-date": "2026-08-04T11:18:36.650Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -4748,6 +4748,10 @@
                 ],
                 "example": "string or id"
               },
+              "previous_machine_id": {},
+              "wiseTransactionId": {
+                "type": "string"
+              },
               "locale": {
                 "type": "string"
               },
@@ -6262,6 +6266,10 @@
                         }
                       }
                     },
+                    "previous_machine_id": {},
+                    "wiseTransactionId": {
+                      "type": "string"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -6434,6 +6442,10 @@
                 }
               }
             }
+          },
+          "previous_machine_id": {},
+          "wiseTransactionId": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
@@ -7733,6 +7745,10 @@
                               "type": "string"
                             }
                           }
+                        },
+                        "previous_machine_id": {},
+                        "wiseTransactionId": {
+                          "type": "string"
                         },
                         "createdAt": {
                           "type": "string",
@@ -10047,6 +10063,10 @@
                         }
                       }
                     },
+                    "previous_machine_id": {},
+                    "wiseTransactionId": {
+                      "type": "string"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -11500,6 +11520,10 @@
                                 "type": "string"
                               }
                             }
+                          },
+                          "previous_machine_id": {},
+                          "wiseTransactionId": {
+                            "type": "string"
                           },
                           "createdAt": {
                             "type": "string",
