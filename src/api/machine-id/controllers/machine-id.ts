@@ -3,6 +3,8 @@
  */
 
 import { factories } from "@strapi/strapi";
+import adminNotificationService from "../../../services/adminNotificationService";
+import notificationService from "../../../services/notificationService";
 
 function getIdOrDocumentIdFilter(value: any) {
   if (!value) return null;
@@ -402,6 +404,37 @@ export default factories.createCoreController(
               status: "published",
             });
 
+          adminNotificationService
+            .notifyAdminsOnMachineIdChange(strapi, {
+              action: "created",
+              clientUser: targetUser,
+              newMachineId,
+              previousMachineId: [],
+              wiseTransactionId,
+              updatedAt: newRecord.createdAt || new Date(),
+            })
+            .catch((err) =>
+              strapi.log.error(
+                "Failed sending admin notification for Machine ID creation:",
+                err
+              )
+            );
+
+          notificationService
+            .notifyMachineIdChanged(strapi, {
+              action: "created",
+              user: targetUser,
+              newMachineId,
+              previousMachineId: [],
+              wiseTransactionId,
+            })
+            .catch((err) =>
+              strapi.log.error(
+                "Failed creating notification record for Machine ID creation:",
+                err
+              )
+            );
+
           return ctx.send({
             success: true,
             message: "Machine ID created successfully",
@@ -466,6 +499,37 @@ export default factories.createCoreController(
             populate: ["users_permissions_user"],
             status: "published",
           });
+
+        adminNotificationService
+          .notifyAdminsOnMachineIdChange(strapi, {
+            action: "updated",
+            clientUser: targetUser,
+            newMachineId,
+            previousMachineId: prevList,
+            wiseTransactionId,
+            updatedAt: updatedRecord.updatedAt || new Date(),
+          })
+          .catch((err) =>
+            strapi.log.error(
+              "Failed sending admin notification for Machine ID update:",
+              err
+            )
+          );
+
+        notificationService
+          .notifyMachineIdChanged(strapi, {
+            action: "updated",
+            user: targetUser,
+            newMachineId,
+            previousMachineId: prevList,
+            wiseTransactionId,
+          })
+          .catch((err) =>
+            strapi.log.error(
+              "Failed creating notification record for Machine ID update:",
+              err
+            )
+          );
 
         return ctx.send({
           success: true,
@@ -579,6 +643,37 @@ export default factories.createCoreController(
             populate: ["users_permissions_user"],
             status: "published",
           });
+
+        adminNotificationService
+          .notifyAdminsOnMachineIdChange(strapi, {
+            action: "updated",
+            clientUser: user || existingRecord.users_permissions_user || {},
+            newMachineId: newMachineId,
+            previousMachineId: prevList,
+            wiseTransactionId: wiseTx,
+            updatedAt: updatedRecord.updatedAt || new Date(),
+          })
+          .catch((err) =>
+            strapi.log.error(
+              "Failed sending admin notification for Machine ID update:",
+              err
+            )
+          );
+
+        notificationService
+          .notifyMachineIdChanged(strapi, {
+            action: "updated",
+            user: user || existingRecord.users_permissions_user || {},
+            newMachineId: newMachineId,
+            previousMachineId: prevList,
+            wiseTransactionId: wiseTx,
+          })
+          .catch((err) =>
+            strapi.log.error(
+              "Failed creating notification record for Machine ID update:",
+              err
+            )
+          );
 
         return ctx.send({
           success: true,

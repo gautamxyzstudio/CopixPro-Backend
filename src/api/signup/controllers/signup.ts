@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import notificationService from "../../../services/notificationService";
 
 export default {
     async register(ctx: any) {
@@ -168,16 +169,25 @@ export default {
             return ctx.badRequest("Invalid or expired link");
         }
 
-        await strapi.db
+        const updatedUser = await strapi.db
             .query("plugin::users-permissions.user")
             .update({
                 where: { id: user.id },
                 data: {
                     confirmed: true,
                     confirmationToken: null,
-                    isActive:true
+                    isActive: true,
                 },
             });
+
+        notificationService
+            .notifyUserActivated(strapi, updatedUser || user)
+            .catch((err) =>
+                strapi.log.error(
+                    "Failed notification for user email verification activation:",
+                    err
+                )
+            );
 
         ctx.redirect(`${process.env.FRONTEND_URL}/login`);
     },

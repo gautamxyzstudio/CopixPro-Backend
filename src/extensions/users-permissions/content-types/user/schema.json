@@ -73,9 +73,6 @@
     "lastName": {
       "type": "string"
     },
-    "phoneNumber": {
-      "type": "string"
-    },
     "payment_logs": {
       "type": "relation",
       "relation": "oneToMany",

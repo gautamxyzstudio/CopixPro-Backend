@@ -483,7 +483,7 @@ export interface ApiMachineIdMachineId extends Struct.CollectionTypeSchema {
     singularName: 'machine-id';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -506,6 +506,47 @@ export interface ApiMachineIdMachineId extends Struct.CollectionTypeSchema {
       'plugin::users-permissions.user'
     >;
     wiseTransactionId: Schema.Attribute.String;
+  };
+}
+
+export interface ApiNotificationNotification
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'notifications';
+  info: {
+    description: 'Notifications for admin dashboard';
+    displayName: 'Notification';
+    pluralName: 'notifications';
+    singularName: 'notification';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    data: Schema.Attribute.JSON;
+    isRead: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notification.notification'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    type: Schema.Attribute.Enumeration<
+      ['USER_ACTIVATED', 'MACHINE_ID_CREATED', 'MACHINE_ID_UPDATED']
+    > &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -1133,7 +1174,6 @@ export interface PluginUsersPermissionsUser
       'oneToMany',
       'api::payment-log.payment-log'
     >;
-    phoneNumber: Schema.Attribute.String;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1166,6 +1206,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::contact-form.contact-form': ApiContactFormContactForm;
       'api::machine-id.machine-id': ApiMachineIdMachineId;
+      'api::notification.notification': ApiNotificationNotification;
       'api::order.order': ApiOrderOrder;
       'api::payment-log.payment-log': ApiPaymentLogPaymentLog;
       'api::software.software': ApiSoftwareSoftware;

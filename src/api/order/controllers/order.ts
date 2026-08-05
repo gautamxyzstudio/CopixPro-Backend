@@ -1,4 +1,5 @@
 import { factories } from "@strapi/strapi";
+import orderExpirationService from "../../../services/orderExpirationService";
 
 function getIdOrDocumentIdFilter(value: any) {
   if (!value) return null;
@@ -133,6 +134,9 @@ export default factories.createCoreController(
     },
 
     async getMyOrders(ctx) {
+      // Trigger order expiration check for orders >30m old without wiseTransactionId
+      await orderExpirationService.expireUnpaidOrders(strapi);
+
       let user = ctx.state.user;
 
       const authHeader = ctx.headers.authorization || ctx.request.headers.authorization;
@@ -193,6 +197,9 @@ export default factories.createCoreController(
     },
 
     async paymentStatus(ctx) {
+      // Trigger order expiration check for orders >30m old without wiseTransactionId
+      await orderExpirationService.expireUnpaidOrders(strapi);
+
       const { orderNumber } = ctx.params;
 
       const order = await strapi.documents("api::order.order").findFirst({
