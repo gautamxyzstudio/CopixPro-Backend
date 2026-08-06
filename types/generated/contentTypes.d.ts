@@ -443,6 +443,38 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
+  collectionName: 'blogs';
+  info: {
+    displayName: 'Blog';
+    pluralName: 'blogs';
+    singularName: 'blog';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    blog_content: Schema.Attribute.Text;
+    blog_date: Schema.Attribute.Date;
+    blog_image: Schema.Attribute.Media<'images'>;
+    blog_short_description: Schema.Attribute.Text;
+    blog_slug: Schema.Attribute.Text;
+    blog_title: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::blog.blog'> &
+      Schema.Attribute.Private;
+    meta_description: Schema.Attribute.Text;
+    meta_title: Schema.Attribute.Text;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiContactFormContactForm extends Struct.CollectionTypeSchema {
   collectionName: 'contact_forms';
   info: {
@@ -451,7 +483,7 @@ export interface ApiContactFormContactForm extends Struct.CollectionTypeSchema {
     singularName: 'contact-form';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -612,11 +644,10 @@ export interface ApiPaymentLogPaymentLog extends Struct.CollectionTypeSchema {
     singularName: 'payment-log';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     amount: Schema.Attribute.Decimal;
-    country: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -655,7 +686,7 @@ export interface ApiSoftwareSoftware extends Struct.CollectionTypeSchema {
     singularName: 'software';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -675,9 +706,11 @@ export interface ApiSoftwareSoftware extends Struct.CollectionTypeSchema {
       'api::payment-log.payment-log'
     >;
     publishedAt: Schema.Attribute.DateTime;
+    software_url: Schema.Attribute.Media<'files'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user_manual_pdf: Schema.Attribute.Media<'files'>;
   };
 }
 
@@ -1204,6 +1237,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::blog.blog': ApiBlogBlog;
       'api::contact-form.contact-form': ApiContactFormContactForm;
       'api::machine-id.machine-id': ApiMachineIdMachineId;
       'api::notification.notification': ApiNotificationNotification;

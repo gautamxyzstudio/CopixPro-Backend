@@ -1,14 +1,12 @@
 export default {
-
   routes: [
-
     {
       method: "POST",
       path: "/orders/create",
       handler: "order.create",
       config: {
-        auth: {}
-      }
+        auth: {},
+      },
     },
 
     {
@@ -16,8 +14,8 @@ export default {
       path: "/orders/me",
       handler: "order.getMyOrders",
       config: {
-        auth: {}
-      }
+        auth: {},
+      },
     },
 
     {
@@ -25,19 +23,8 @@ export default {
       path: "/orders/status/:orderNumber",
       handler: "order.paymentStatus",
       config: {
-        auth: {}
-      }
+        auth: {},
+      },
     },
-
-    {
-      method: "POST",
-      path: "/orders/process-download-emails",
-      handler: "order.processSoftwareDownloadEmails",
-      config: {
-        auth: {}
-      }
-    }
-
-  ]
-
+  ],
 };

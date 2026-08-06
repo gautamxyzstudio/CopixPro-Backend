@@ -7,7 +7,7 @@
     "displayName": "contact_form"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

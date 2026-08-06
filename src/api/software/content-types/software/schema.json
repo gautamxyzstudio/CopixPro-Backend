@@ -7,7 +7,7 @@
     "displayName": "software"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -28,6 +28,16 @@
       "relation": "oneToMany",
       "target": "api::order.order",
       "mappedBy": "software"
+    },
+    "software_url": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["files"]
+    },
+    "user_manual_pdf": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["files"]
     }
   }
 }

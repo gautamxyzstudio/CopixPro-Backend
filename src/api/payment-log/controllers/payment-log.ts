@@ -6,13 +6,41 @@ function getIdOrDocumentIdFilter(value: any) {
   const str = String(value).trim();
   if (/^\d+$/.test(str)) {
     return {
-      $or: [
-        { id: Number(str) },
-        { documentId: str },
-      ],
+      $or: [{ id: Number(str) }, { documentId: str }],
     };
   }
   return { documentId: str };
+}
+
+function formatMediaUrl(
+  media: any,
+  fallbackUrl?: string | null,
+): string | null {
+  if (media && typeof media === "object" && media.url) {
+    const url = String(media.url).trim();
+    if (url) {
+      if (url.startsWith("http://") || url.startsWith("https://")) {
+        return url;
+      }
+      const backendUrl = (
+        process.env.BACKEND_URL || "http://localhost:1338"
+      ).replace(/\/$/, "");
+      const cleanUrl = url.startsWith("/") ? url : `/${url}`;
+      return `${backendUrl}${cleanUrl}`;
+    }
+  }
+  if (fallbackUrl && typeof fallbackUrl === "string" && fallbackUrl.trim()) {
+    const url = fallbackUrl.trim();
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+    const backendUrl = (
+      process.env.BACKEND_URL || "http://localhost:1338"
+    ).replace(/\/$/, "");
+    const cleanUrl = url.startsWith("/") ? url : `/${url}`;
+    return `${backendUrl}${cleanUrl}`;
+  }
+  return null;
 }
 
 export default factories.createCoreController(
@@ -40,7 +68,8 @@ export default factories.createCoreController(
 
         // 1. Authenticate user (from ctx.state.user, JWT Authorization header, or email lookup)
         let user = ctx.state.user;
-        const authHeader = ctx.headers.authorization || ctx.request.headers.authorization;
+        const authHeader =
+          ctx.headers.authorization || ctx.request.headers.authorization;
 
         if (!user && authHeader && authHeader.startsWith("Bearer ")) {
           try {
@@ -58,7 +87,9 @@ export default factories.createCoreController(
                 });
             }
           } catch (err) {
-            strapi.log.warn("Invalid JWT token in verifyWisePayment authorization header");
+            strapi.log.warn(
+              "Invalid JWT token in verifyWisePayment authorization header",
+            );
           }
         }
 
@@ -75,8 +106,16 @@ export default factories.createCoreController(
         if (orderId) {
           const orderIdStr = String(orderId).trim();
           const orderFilter: any = /^\d+$/.test(orderIdStr)
-            ? { $or: [{ id: Number(orderIdStr) }, { documentId: orderIdStr }, { orderNumber: orderIdStr }] }
-            : { $or: [{ orderNumber: orderIdStr }, { documentId: orderIdStr }] };
+            ? {
+                $or: [
+                  { id: Number(orderIdStr) },
+                  { documentId: orderIdStr },
+                  { orderNumber: orderIdStr },
+                ],
+              }
+            : {
+                $or: [{ orderNumber: orderIdStr }, { documentId: orderIdStr }],
+              };
 
           order = await strapi.documents("api::order.order").findFirst({
             filters: orderFilter,
@@ -110,7 +149,8 @@ export default factories.createCoreController(
           return ctx.send(
             {
               success: false,
-              message: "Authentication required or valid user email must be provided",
+              message:
+                "Authentication required or valid user email must be provided",
             },
             401,
           );
@@ -208,19 +248,26 @@ export default factories.createCoreController(
 
         // 4. Fetch associated software for download link
         let softwareRecord: any = null;
-        const targetSoftwareId = softwareId || (typeof order?.software === "object" ? (order.software.documentId || order.software.id) : order?.software);
+        const targetSoftwareId =
+          softwareId ||
+          (typeof order?.software === "object"
+            ? order.software.documentId || order.software.id
+            : order?.software);
 
         if (targetSoftwareId) {
           softwareRecord = await strapi
             .documents("api::software.software")
             .findFirst({
               filters: getIdOrDocumentIdFilter(targetSoftwareId),
+              populate: ["software_url", "user_manual_pdf"],
             });
         }
         if (!softwareRecord) {
           softwareRecord = await strapi
             .documents("api::software.software")
-            .findFirst({});
+            .findFirst({
+              populate: ["software_url", "user_manual_pdf"],
+            });
         }
 
         // 5. Create payment-log record in Strapi DB
@@ -233,8 +280,10 @@ export default factories.createCoreController(
           paidAt: paidAtDate,
           response: tx,
           users_permissions_user: user.documentId || user.id,
-          software: softwareRecord ? (softwareRecord.documentId || softwareRecord.id) : null,
-          order: order ? (order.documentId || order.id) : null,
+          software: softwareRecord
+            ? softwareRecord.documentId || softwareRecord.id
+            : null,
+          order: order ? order.documentId || order.id : null,
           publishedAt: new Date(),
         };
 
@@ -254,7 +303,9 @@ export default factories.createCoreController(
               paidAt: paidAtDate,
               paymentLog: paymentLog.documentId || paymentLog.id,
               users_permissions_user: user.documentId || user.id,
-              software: softwareRecord ? (softwareRecord.documentId || softwareRecord.id) : null,
+              software: softwareRecord
+                ? softwareRecord.documentId || softwareRecord.id
+                : null,
             },
             status: "published",
           });
@@ -266,10 +317,18 @@ export default factories.createCoreController(
           data: { isActive: true },
         });
 
+        const softwareUrlFormatted = formatMediaUrl(
+          softwareRecord?.software_url,
+        );
+        const userManualPdfFormatted = formatMediaUrl(
+          softwareRecord?.user_manual_pdf,
+        );
+
         return ctx.send({
           success: true,
           message: "Wise payment verified successfully!",
-          downloadFileUrl: softwareRecord?.downloadFileUrl || null,
+          software_url: softwareUrlFormatted,
+          user_manual_pdf: userManualPdfFormatted,
           data: {
             orderId: order?.documentId,
             paymentStatus: order ? "paid" : null,
@@ -279,7 +338,8 @@ export default factories.createCoreController(
             amount: txAmount,
             currency: txCurrency,
             paidAt: paidAtDate,
-            downloadFileUrl: softwareRecord?.downloadFileUrl || null,
+            software_url: softwareUrlFormatted,
+            user_manual_pdf: userManualPdfFormatted,
           },
         });
       } catch (error: any) {

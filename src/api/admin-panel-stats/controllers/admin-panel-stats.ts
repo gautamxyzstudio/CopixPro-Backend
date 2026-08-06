@@ -112,6 +112,7 @@ export default {
             role: {
               name: "Client",
             },
+            isActive: true,
           },
           populate: {
             role: {

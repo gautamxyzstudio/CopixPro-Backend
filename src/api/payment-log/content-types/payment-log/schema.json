@@ -7,7 +7,7 @@
     "displayName": "payment_logs"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -19,16 +19,9 @@
     "currency": {
       "type": "string"
     },
-    "country": {
-      "type": "string"
-    },
     "payment_status": {
       "type": "enumeration",
-      "enum": [
-        "paid",
-        "pending",
-        "failed"
-      ]
+      "enum": ["paid", "pending", "failed"]
     },
     "response": {
       "type": "json"
