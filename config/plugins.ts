@@ -1,11 +1,14 @@
 import type { Core } from "@strapi/strapi";
 
-const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin => ({
+const config = ({
+  env,
+}: Core.Config.Shared.ConfigParams): Core.Config.Plugin => ({
   upload: {
     config: {
       provider: "local",
       providerOptions: {
         sizeLimit: 300 * 1024 * 1024, // 300MB maximum file size limit
+        path: env("UPLOAD_PATH", "./public/uploads"),
       },
       actionOptions: {
         upload: {},
