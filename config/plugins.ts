@@ -8,7 +8,7 @@ const config = ({
       provider: "local",
       providerOptions: {
         sizeLimit: 300 * 1024 * 1024, // 300MB maximum file size limit
-        path: env("UPLOAD_PATH", "./public/uploads"),
+        path: env("UPLOAD_PATH", "/data/uploads"),
       },
       actionOptions: {
         upload: {},
