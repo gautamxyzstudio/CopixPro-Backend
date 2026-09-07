@@ -58,15 +58,78 @@ export default factories.createCoreController(
         user,
         userId,
         users_permissions_user,
+        couponCode,
+        coupon,
+        code,
       } = body;
 
       if (!customerName || !customerEmail || !amount) {
         return ctx.badRequest("Missing required fields");
       }
 
+      // 1. Coupon Validation & Discount Calculation
+      const providedCoupon = couponCode || coupon || code;
+      let targetCoupon: any = null;
+      let finalAmount = Number(amount);
+      let discountAmount = 0;
+
+      if (providedCoupon) {
+        const codeStr = String(
+          typeof providedCoupon === "object"
+            ? providedCoupon.code || providedCoupon.id || providedCoupon.documentId
+            : providedCoupon
+        ).trim();
+
+        if (codeStr) {
+          targetCoupon = await strapi
+            .documents("api::coupon.coupon")
+            .findFirst({
+              filters: {
+                code: { $eqi: codeStr },
+              },
+            });
+
+          if (!targetCoupon) {
+            return ctx.badRequest("Invalid coupon code. Coupon does not exist.");
+          }
+
+          if (!targetCoupon.isActive) {
+            return ctx.badRequest("Coupon is not active or has expired.");
+          }
+
+          if (
+            targetCoupon.maxUses !== null &&
+            targetCoupon.maxUses !== undefined &&
+            Number(targetCoupon.maxUses) <= 0
+          ) {
+            return ctx.badRequest("Coupon usage limit has been reached.");
+          }
+
+          const discountType = String(targetCoupon.discountType || "percentage").toLowerCase();
+
+          if (discountType === "flat") {
+            const flatVal = Number(targetCoupon.flatDiscount || targetCoupon.discountAmount || 0);
+            if (flatVal > 0) {
+              discountAmount = Math.min(finalAmount, flatVal);
+              finalAmount = Math.max(0, finalAmount - discountAmount);
+              finalAmount = Number(finalAmount.toFixed(2));
+              discountAmount = Number(discountAmount.toFixed(2));
+            }
+          } else {
+            const discountPercentage = Number(targetCoupon.discountPercentage) || 0;
+            if (discountPercentage > 0) {
+              discountAmount = (finalAmount * discountPercentage) / 100;
+              finalAmount = Math.max(0, finalAmount - discountAmount);
+              finalAmount = Number(finalAmount.toFixed(2));
+              discountAmount = Number(discountAmount.toFixed(2));
+            }
+          }
+        }
+      }
+
       const orderNumber = `CPX-${Date.now()}`;
 
-      // 1. Resolve User (from Authorization header JWT, ctx.state.user, passed payload, or email lookup)
+      // 2. Resolve User (from Authorization header JWT, ctx.state.user, passed payload, or email lookup)
       let targetUser = ctx.state.user;
 
       const authHeader =
@@ -117,7 +180,7 @@ export default factories.createCoreController(
           });
       }
 
-      // 2. Resolve Software (from passed payload or fallback to default software record)
+      // 3. Resolve Software (from passed payload or fallback to default software record)
       let targetSoftware: any = null;
       const providedSoftware = software || softwareId;
 
@@ -142,13 +205,18 @@ export default factories.createCoreController(
           .findFirst({});
       }
 
-      // 3. Create Order with linked relations
+      // 4. Resolve Payment Link (Use coupon-specific payment link if configured, else default WISE_PAYMENT_LINK)
+      const paymentLink =
+        (targetCoupon && targetCoupon.paymentLink && targetCoupon.paymentLink.trim()) ||
+        process.env.WISE_PAYMENT_LINK;
+
+      // 5. Create Order with linked relations
       const order = await strapi.documents("api::order.order").create({
         data: {
           orderNumber,
           customerName,
           customerEmail,
-          amount: Number(amount),
+          amount: finalAmount,
           currency: currency || "USD",
           paymentMethod: "WISE",
           paymentReference: orderNumber,
@@ -159,16 +227,38 @@ export default factories.createCoreController(
           users_permissions_user: targetUser
             ? targetUser.documentId || targetUser.id
             : null,
+          coupon: targetCoupon
+            ? targetCoupon.documentId || targetCoupon.id
+            : null,
+          couponCode: targetCoupon ? targetCoupon.code : null,
+          discountAmount: discountAmount > 0 ? discountAmount : null,
           publishedAt: new Date().toISOString(),
-        },
-        populate: ["software", "users_permissions_user"],
+        } as any,
+        populate: ["software", "users_permissions_user", "coupon"] as any,
         status: "published",
       });
 
       ctx.send({
         success: true,
         order,
-        paymentLink: process.env.WISE_PAYMENT_LINK,
+        paymentLink,
+        discount: targetCoupon
+          ? {
+              couponCode: targetCoupon.code,
+              discountType: targetCoupon.discountType || "percentage",
+              discountPercentage:
+                (targetCoupon.discountType || "percentage") === "percentage"
+                  ? targetCoupon.discountPercentage
+                  : null,
+              flatDiscount:
+                targetCoupon.discountType === "flat"
+                  ? targetCoupon.flatDiscount
+                  : null,
+              originalAmount: Number(amount),
+              discountAmount,
+              finalAmount,
+            }
+          : null,
       });
     },
 
@@ -236,6 +326,7 @@ export default factories.createCoreController(
             populate: ["software_url", "user_manual_pdf"],
           },
           users_permissions_user: true,
+          coupon: true,
         },
         sort: ["createdAt:desc"],
       });
@@ -281,6 +372,7 @@ export default factories.createCoreController(
             populate: ["software_url", "user_manual_pdf"],
           },
           users_permissions_user: true,
+          coupon: true,
         },
       });
 

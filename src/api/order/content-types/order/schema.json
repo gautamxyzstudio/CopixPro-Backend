@@ -88,6 +88,18 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "orders"
+    },
+    "coupon": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::coupon.coupon",
+      "inversedBy": "orders"
+    },
+    "couponCode": {
+      "type": "string"
+    },
+    "discountAmount": {
+      "type": "decimal"
     }
   }
 }
