@@ -1,4 +1,5 @@
 import orderExpirationService from "../../../services/orderExpirationService";
+import { handleControllerError } from "../../../utils/errorHandler";
 
 export default {
   async getStats(ctx: any) {
@@ -68,7 +69,7 @@ export default {
       });
     } catch (error) {
       strapi.log.error("Dashboard Stats Error:", error);
-      return ctx.internalServerError("Failed to fetch dashboard statistics");
+      return handleControllerError(ctx, error, "Failed to fetch dashboard statistics");
     }
   },
 
@@ -238,7 +239,7 @@ export default {
       });
     } catch (error) {
       strapi.log.error("Get clients error:", error);
-      return ctx.internalServerError("Failed to fetch clients");
+      return handleControllerError(ctx, error, "Failed to fetch clients");
     }
   },
 
@@ -333,7 +334,7 @@ export default {
       });
     } catch (error) {
       strapi.log.error("Client Status Analysis Error:", error);
-      return ctx.internalServerError("Failed to fetch client status analysis");
+      return handleControllerError(ctx, error, "Failed to fetch client status analysis");
     }
   },
 
@@ -435,7 +436,9 @@ export default {
       return ctx.send(daysList);
     } catch (error) {
       strapi.log.error("Weekly Client Registration Error:", error);
-      return ctx.internalServerError(
+      return handleControllerError(
+        ctx,
+        error,
         "Failed to fetch weekly client registration",
       );
     }

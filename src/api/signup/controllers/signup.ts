@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import notificationService from "../../../services/notificationService";
+import { handleControllerError } from "../../../utils/errorHandler";
 
 export default {
     async register(ctx: any) {
@@ -144,11 +145,7 @@ export default {
         } catch (error: any) {
             console.error("REGISTER ERROR:", error);
 
-            return ctx.internalServerError({
-                success: false,
-                message: "Registration failed",
-                error: error?.message || error,
-            });
+            return handleControllerError(ctx, error, "Registration failed");
         }
     },
 

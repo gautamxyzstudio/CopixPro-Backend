@@ -4,6 +4,7 @@
  */
 
 import { factories } from "@strapi/strapi";
+import { handleControllerError } from "../../../utils/errorHandler";
 
 function getIdOrDocumentIdFilter(value: any) {
   if (!value) return null;
@@ -318,8 +319,10 @@ async function updateSoftwareFilesHandler(strapi: any, ctx: any) {
     });
   } catch (error: any) {
     strapi.log.error("Update Software Files Error:", error);
-    return ctx.internalServerError(
-      error?.message || "Failed to update software files"
+    return handleControllerError(
+      ctx,
+      error,
+      "Failed to update software files"
     );
   }
 }

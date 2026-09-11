@@ -5,6 +5,7 @@
 import { factories } from "@strapi/strapi";
 import adminNotificationService from "../../../services/adminNotificationService";
 import notificationService from "../../../services/notificationService";
+import { handleControllerError } from "../../../utils/errorHandler";
 
 function getIdOrDocumentIdFilter(value: any) {
   if (!value) return null;
@@ -222,8 +223,10 @@ export default factories.createCoreController(
         return ctx.send(machineIds);
       } catch (error: any) {
         strapi.log.error("Find Machine IDs Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to fetch machine IDs",
+        return handleControllerError(
+          ctx,
+          error,
+          "Failed to fetch machine IDs",
         );
       }
     },
@@ -268,8 +271,10 @@ export default factories.createCoreController(
         return ctx.send(record);
       } catch (error: any) {
         strapi.log.error("Find One Machine ID Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to fetch machine ID",
+        return handleControllerError(
+          ctx,
+          error,
+          "Failed to fetch machine ID",
         );
       }
     },
@@ -309,8 +314,10 @@ export default factories.createCoreController(
         return ctx.send(machineIds);
       } catch (error: any) {
         strapi.log.error("Get My Machine ID Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to fetch your machine ID",
+        return handleControllerError(
+          ctx,
+          error,
+          "Failed to fetch your machine ID",
         );
       }
     },
@@ -538,8 +545,10 @@ export default factories.createCoreController(
         });
       } catch (error: any) {
         strapi.log.error("Create Machine ID Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to process machine ID",
+        return handleControllerError(
+          ctx,
+          error,
+          "Failed to process machine ID",
         );
       }
     },
@@ -682,8 +691,10 @@ export default factories.createCoreController(
         });
       } catch (error: any) {
         strapi.log.error("Update Machine ID Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to update machine ID",
+        return handleControllerError(
+          ctx,
+          error,
+          "Failed to update machine ID",
         );
       }
     },

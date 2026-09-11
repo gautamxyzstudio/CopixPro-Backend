@@ -1,5 +1,6 @@
 
 import crypto from "crypto";
+import { handleControllerError } from "../../../utils/errorHandler";
 
 export default {
     async forgotPassword(ctx: any) {
@@ -89,7 +90,7 @@ export default {
             });
         } catch (error) {
             console.error(error);
-            return ctx.internalServerError("Something went wrong");
+            return handleControllerError(ctx, error, "Something went wrong");
         }
     },
 
@@ -157,7 +158,7 @@ export default {
             });
         } catch (error) {
             console.error(error);
-            return ctx.internalServerError("Verification failed");
+            return handleControllerError(ctx, error, "Verification failed");
         }
     },
 
@@ -263,7 +264,9 @@ export default {
             });
         } catch (error) {
             console.error(error);
-            return ctx.internalServerError(
+            return handleControllerError(
+                ctx,
+                error,
                 "Failed to resend OTP"
             );
         }
@@ -329,7 +332,7 @@ export default {
             });
         } catch (error) {
             console.error(error);
-            return ctx.internalServerError("Reset failed");
+            return handleControllerError(ctx, error, "Reset failed");
         }
     }
 

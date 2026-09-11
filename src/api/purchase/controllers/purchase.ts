@@ -1,3 +1,5 @@
+import { handleControllerError } from "../../../utils/errorHandler";
+
 function formatMediaUrl(media: any, fallbackUrl?: string | null): string | null {
   if (media && typeof media === "object" && media.url) {
     const url = String(media.url).trim();
@@ -67,9 +69,7 @@ export default {
       });
     } catch (error) {
       strapi.log.error("Get latest purchase error:", error);
-      return ctx.internalServerError("Something went wrong");
+      return handleControllerError(ctx, error, "Something went wrong");
     }
   },
 };
-
-

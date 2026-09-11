@@ -1,5 +1,6 @@
 import { factories } from "@strapi/strapi";
 import notificationService from "../../../services/notificationService";
+import { handleControllerError } from "../../../utils/errorHandler";
 
 async function resolveUserFromCtx(strapi: any, ctx: any): Promise<any> {
   let user = ctx.state.user;
@@ -55,7 +56,7 @@ export default factories.createCoreController(
         return ctx.send(notifications);
       } catch (error: any) {
         strapi.log.error("Find notifications error:", error);
-        return ctx.internalServerError("Failed to fetch notifications");
+        return handleControllerError(ctx, error, "Failed to fetch notifications");
       }
     },
 
@@ -90,7 +91,7 @@ export default factories.createCoreController(
         });
       } catch (error: any) {
         strapi.log.error("Mark notification read error:", error);
-        return ctx.internalServerError("Failed to update notification");
+        return handleControllerError(ctx, error, "Failed to update notification");
       }
     },
 
@@ -128,7 +129,7 @@ export default factories.createCoreController(
         });
       } catch (error: any) {
         strapi.log.error("Mark all notifications read error:", error);
-        return ctx.internalServerError("Failed to update notifications");
+        return handleControllerError(ctx, error, "Failed to update notifications");
       }
     },
   }),

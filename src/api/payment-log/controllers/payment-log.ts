@@ -1,5 +1,6 @@
 import { factories } from "@strapi/strapi";
 import { wiseService } from "../../../services/wiseService";
+import { handleControllerError } from "../../../utils/errorHandler";
 
 function getIdOrDocumentIdFilter(value: any) {
   if (!value) return null;
@@ -344,11 +345,7 @@ export default factories.createCoreController(
         });
       } catch (error: any) {
         strapi.log.error("Wise Payment Verification Error:", error);
-        return ctx.internalServerError({
-          success: false,
-          message: "Failed to verify Wise payment",
-          error: error.message || error,
-        });
+        return handleControllerError(ctx, error, "Failed to verify Wise payment");
       }
     },
 
@@ -363,10 +360,7 @@ export default factories.createCoreController(
           data: profiles,
         });
       } catch (error: any) {
-        return ctx.internalServerError({
-          success: false,
-          message: error.message || "Failed to fetch Wise profiles",
-        });
+        return handleControllerError(ctx, error, "Failed to fetch Wise profiles");
       }
     },
 
@@ -390,10 +384,7 @@ export default factories.createCoreController(
           data: statement,
         });
       } catch (error: any) {
-        return ctx.internalServerError({
-          success: false,
-          message: error.message || "Failed to fetch Wise statement",
-        });
+        return handleControllerError(ctx, error, "Failed to fetch Wise statement");
       }
     },
 

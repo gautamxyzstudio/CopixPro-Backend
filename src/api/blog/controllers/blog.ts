@@ -3,6 +3,7 @@
  */
 
 import { factories } from "@strapi/strapi";
+import { handleControllerError } from "../../../utils/errorHandler";
 
 function getIdOrDocumentIdFilter(value: any) {
   if (!value) return null;
@@ -36,9 +37,7 @@ export default factories.createCoreController(
         return this.transformResponse(sanitizedBlogs);
       } catch (error: any) {
         strapi.log.error("Find Blogs Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to fetch blogs",
-        );
+        return handleControllerError(ctx, error, "Failed to fetch blogs");
       }
     },
 
@@ -68,9 +67,7 @@ export default factories.createCoreController(
         return this.transformResponse(sanitizedBlog);
       } catch (error: any) {
         strapi.log.error("Find One Blog Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to fetch blog post",
-        );
+        return handleControllerError(ctx, error, "Failed to fetch blog post");
       }
     },
 
@@ -108,9 +105,7 @@ export default factories.createCoreController(
         return sanitizedEntity;
       } catch (error: any) {
         strapi.log.error("Find Blog By Slug Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to fetch blog post by slug",
-        );
+        return handleControllerError(ctx, error, "Failed to fetch blog post by slug");
       }
     },
 
@@ -141,9 +136,7 @@ export default factories.createCoreController(
         });
       } catch (error: any) {
         strapi.log.error("Create Blog Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to create blog post",
-        );
+        return handleControllerError(ctx, error, "Failed to create blog post");
       }
     },
 
@@ -186,9 +179,7 @@ export default factories.createCoreController(
         });
       } catch (error: any) {
         strapi.log.error("Update Blog Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to update blog post",
-        );
+        return handleControllerError(ctx, error, "Failed to update blog post");
       }
     },
 
@@ -227,9 +218,7 @@ export default factories.createCoreController(
         });
       } catch (error: any) {
         strapi.log.error("Delete Blog Error:", error);
-        return ctx.internalServerError(
-          error?.message || "Failed to delete blog post",
-        );
+        return handleControllerError(ctx, error, "Failed to delete blog post");
       }
     },
   }),
