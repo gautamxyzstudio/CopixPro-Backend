@@ -15,11 +15,11 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.47.1",
+    "@strapi/plugin-cloud": "5.56.0",
     "@strapi/plugin-documentation": "^5.47.1",
-    "@strapi/plugin-users-permissions": "5.47.1",
+    "@strapi/plugin-users-permissions": "5.56.0",
     "@strapi/provider-upload-cloudinary": "^5.56.0",
-    "@strapi/strapi": "^5.51.1",
+    "@strapi/strapi": "^5.56.0",
     "axios": "^1.19.0",
     "better-sqlite3": "12.8.0",
     "pg": "^8.21.0",
