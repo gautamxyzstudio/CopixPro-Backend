@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-09-11T08:02:17.424Z"
+    "x-generation-date": "2026-10-06T04:47:35.940Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -183,7 +183,17 @@
             "deprecated": false,
             "required": false,
             "schema": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
             }
           },
           {
@@ -689,7 +699,17 @@
             "deprecated": false,
             "required": false,
             "schema": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
             }
           },
           {
@@ -1195,7 +1215,17 @@
             "deprecated": false,
             "required": false,
             "schema": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
             }
           },
           {
@@ -1701,7 +1731,17 @@
             "deprecated": false,
             "required": false,
             "schema": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
             }
           },
           {
@@ -2207,7 +2247,17 @@
             "deprecated": false,
             "required": false,
             "schema": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
             }
           },
           {
@@ -2788,7 +2838,17 @@
             "deprecated": false,
             "required": false,
             "schema": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
             }
           },
           {
@@ -3294,7 +3354,17 @@
             "deprecated": false,
             "required": false,
             "schema": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
             }
           },
           {
@@ -5521,6 +5591,10 @@
                             "resetPasswordToken": {
                               "type": "string"
                             },
+                            "resetPasswordTokenExpiresAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
                             "registrationToken": {
                               "type": "string"
                             },
@@ -6865,6 +6939,10 @@
               "resetPasswordToken": {
                 "type": "string"
               },
+              "resetPasswordTokenExpiresAt": {
+                "type": "string",
+                "format": "date-time"
+              },
               "registrationToken": {
                 "type": "string"
               },
@@ -8058,6 +8136,10 @@
                                       },
                                       "resetPasswordToken": {
                                         "type": "string"
+                                      },
+                                      "resetPasswordTokenExpiresAt": {
+                                        "type": "string",
+                                        "format": "date-time"
                                       },
                                       "registrationToken": {
                                         "type": "string"
@@ -10549,6 +10631,10 @@
                             },
                             "resetPasswordToken": {
                               "type": "string"
+                            },
+                            "resetPasswordTokenExpiresAt": {
+                              "type": "string",
+                              "format": "date-time"
                             },
                             "registrationToken": {
                               "type": "string"
@@ -13182,6 +13268,10 @@
                             },
                             "resetPasswordToken": {
                               "type": "string"
+                            },
+                            "resetPasswordTokenExpiresAt": {
+                              "type": "string",
+                              "format": "date-time"
                             },
                             "registrationToken": {
                               "type": "string"
@@ -16033,6 +16123,10 @@
                                 "resetPasswordToken": {
                                   "type": "string"
                                 },
+                                "resetPasswordTokenExpiresAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
                                 "registrationToken": {
                                   "type": "string"
                                 },
@@ -18714,6 +18808,10 @@
                             },
                             "resetPasswordToken": {
                               "type": "string"
+                            },
+                            "resetPasswordTokenExpiresAt": {
+                              "type": "string",
+                              "format": "date-time"
                             },
                             "registrationToken": {
                               "type": "string"
@@ -21428,6 +21526,10 @@
                                   },
                                   "resetPasswordToken": {
                                     "type": "string"
+                                  },
+                                  "resetPasswordTokenExpiresAt": {
+                                    "type": "string",
+                                    "format": "date-time"
                                   },
                                   "registrationToken": {
                                     "type": "string"

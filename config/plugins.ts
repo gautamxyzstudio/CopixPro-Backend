@@ -5,16 +5,39 @@ const config = ({
 }: Core.Config.Shared.ConfigParams): Core.Config.Plugin => ({
   upload: {
     config: {
-      provider: "local",
+      provider: "cloudinary",
       providerOptions: {
-        sizeLimit: 300 * 1024 * 1024, // 300MB maximum file size limit
-        path: env("UPLOAD_PATH", "/data/uploads"),
+        cloud_name: env("CLOUDINARY_NAME"),
+        api_key: env("CLOUDINARY_KEY"),
+        api_secret: env("CLOUDINARY_SECRET"),
       },
       actionOptions: {
-        upload: {},
-        uploadStream: {},
+        upload: {
+          folder: env("CLOUDINARY_FOLDER", "copixpro"),
+          use_filename: true,
+          unique_filename: true,
+          overwrite: false,
+          // Automatic compression & modern format delivery
+          transformation: [
+            { quality: "auto:good" }, // Smart compression without perceptible quality loss
+            { fetch_format: "auto" }, // Automatically serve WebP/AVIF when supported
+          ],
+        },
+        uploadStream: {
+          folder: env("CLOUDINARY_FOLDER", "copixpro"),
+          use_filename: true,
+          unique_filename: true,
+          overwrite: false,
+          // Automatic compression & modern format delivery
+          transformation: [
+            { quality: "auto:good" },
+            { fetch_format: "auto" },
+          ],
+        },
         delete: {},
       },
+      // Empty breakpoints: Only store original image and admin thumbnail (no small, medium, large, xlarge)
+      breakpoints: {},
     },
   },
   email: {
